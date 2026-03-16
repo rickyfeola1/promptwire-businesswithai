@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Build a Real Business With AI — Free Prompt Toolkit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,700;0,800;1,700;1,800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --blue: #1292eb;
+            --blue-dim: rgba(18,146,235,0.1);
+            --blue-glow: rgba(18,146,235,0.22);
+            --blue-hover: #0d7fd4;
+            --white: #ffffff;
+            --gray-50: #f8f9fa;
+            --gray-100: #f1f3f5;
+            --gray-200: #e9ecef;
+            --gray-300: #dee2e6;
+            --gray-400: #adb5bd;
+            --gray-500: #6c757d;
+            --gray-700: #343a40;
+            --gray-900: #0d1117;
+            --green: #10b981;
+        }
+
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--white);
+            color: var(--gray-900);
+            overflow-x: hidden;
+        }
+
+        /* ---- HERO ---- */
+        .hero {
+            background: linear-gradient(135deg, #171717 0%, #1292eb 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 64px 40px 72px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 44px 44px;
+            pointer-events: none;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: -20%; right: -5%;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 65%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 56px;
+            align-items: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid rgba(16,185,129,0.35);
+            background: rgba(16,185,129,0.1);
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 100px;
+            margin-bottom: 24px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            animation: fadeUp 0.5s ease both;
+        }
+
+        .hero-badge-dot {
+            width: 7px; height: 7px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            flex-shrink: 0;
+        }
+
+        .hero-headline {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(44px, 7vw, 84px);
+            font-weight: 800;
+            line-height: 0.97;
+            letter-spacing: -0.5px;
+            margin-bottom: 24px;
+            animation: fadeUp 0.5s ease 0.08s both;
+        }
+
+        .hero-headline .line-white { color: white; display: block; }
+        .hero-headline .line-dim { color: rgba(255,255,255,0.4); display: block; font-style: italic; }
+
+        .hero-desc {
+            font-size: 16px;
+            color: rgba(255,255,255,0.6);
+            line-height: 1.7;
+            margin-bottom: 28px;
+            max-width: 480px;
+            animation: fadeUp 0.5s ease 0.14s both;
+        }
+
+        .checklist {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            animation: fadeUp 0.5s ease 0.2s both;
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            color: rgba(255,255,255,0.65);
+            line-height: 1.45;
+        }
+
+        .ci-icon {
+            width: 18px; height: 18px;
+            background: rgba(18,146,235,0.25);
+            border: 1px solid rgba(18,146,235,0.4);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 9px;
+            color: #7dc8f7;
+            flex-shrink: 0;
+            margin-top: 1px;
+        }
+
+        /* ---- FORM CARD ---- */
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+            animation: fadeUp 0.5s ease 0.16s both;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--blue), #38bdf8);
+        }
+
+        .form-eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16,185,129,0.1);
+            border: 1px solid rgba(16,185,129,0.2);
+            color: var(--green);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 100px;
+            margin-bottom: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-card h3 {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.15;
+            margin-bottom: 6px;
+            color: var(--gray-900);
+        }
+
+        .form-card-sub {
+            font-size: 13px;
+            color: var(--gray-500);
+            line-height: 1.6;
+            margin-bottom: 18px;
+        }
+
+        /* kit stats */
+        .kit-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            background: var(--gray-50);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 10px 8px;
+            text-align: center;
+        }
+
+        .stat-num {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--blue);
+            line-height: 1;
+            margin-bottom: 2px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 13px 16px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            color: var(--gray-900);
+            outline: none;
+            transition: border-color 0.2s;
+            margin-bottom: 10px;
+            background: var(--white);
+        }
+
+        .form-input:focus { border-color: var(--blue); }
+        .form-input.error { border-color: #dc2626; }
+
+        .form-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .form-btn:hover {
+            background: var(--blue-hover);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 24px var(--blue-glow);
+        }
+
+        .form-trust {
+            margin-top: 10px;
+            font-size: 11px;
+            color: var(--gray-400);
+            text-align: center;
+        }
+
+        /* ---- BODY ---- */
+        .section {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 72px 40px;
+        }
+
+        .section-eyebrow {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--blue);
+            margin-bottom: 12px;
+        }
+
+        .section-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(30px, 4vw, 48px);
+            font-weight: 800;
+            line-height: 1.05;
+            color: var(--gray-900);
+            margin-bottom: 12px;
+        }
+
+        .section-sub {
+            font-size: 15px;
+            color: var(--gray-500);
+            line-height: 1.7;
+            max-width: 560px;
+            margin-bottom: 44px;
+        }
+
+        .divider { border: none; border-top: 1px solid var(--gray-200); }
+
+        /* ---- PROMPTS TIMELINE ---- */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 28px;
+            top: 0; bottom: 0;
+            width: 2px;
+            background: var(--gray-200);
+        }
+
+        .timeline-item {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 24px;
+            padding: 0 0 36px 0;
+            position: relative;
+        }
+
+        .timeline-item:last-child { padding-bottom: 0; }
+
+        .timeline-dot {
+            width: 58px; height: 58px;
+            background: white;
+            border: 2px solid var(--gray-200);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 1;
+            transition: all 0.2s;
+        }
+
+        .timeline-item:hover .timeline-dot {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 4px var(--blue-dim);
+        }
+
+        .timeline-content {
+            padding-top: 12px;
+        }
+
+        .timeline-tag {
+            font-size: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--blue);
+            background: var(--blue-dim);
+            padding: 3px 10px;
+            border-radius: 100px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+
+        .timeline-title {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--gray-900);
+            margin-bottom: 6px;
+            line-height: 1.1;
+        }
+
+        .timeline-desc {
+            font-size: 14px;
+            color: var(--gray-500);
+            line-height: 1.65;
+            max-width: 580px;
+        }
+
+        .timeline-save {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        /* ---- WHAT YOU'LL HAVE ---- */
+        .output-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .output-item {
+            background: var(--white);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+        }
+
+        .output-item:hover {
+            border-color: var(--blue);
+            box-shadow: 0 4px 16px var(--blue-dim);
+        }
+
+        .output-icon {
+            width: 36px; height: 36px;
+            background: var(--blue-dim);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .output-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-700);
+            line-height: 1.4;
+        }
+
+        /* ---- COMPARISON ---- */
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .comp-col {
+            border-radius: 14px;
+            padding: 26px;
+        }
+
+        .comp-col.old {
+            background: white;
+            border: 1.5px solid var(--gray-200);
+        }
+
+        .comp-col.new {
+            background: var(--gray-900);
+            border: 1.5px solid rgba(18,146,235,0.2);
+        }
+
+        .comp-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+
+        .comp-label.old-label { color: var(--gray-400); }
+        .comp-label.new-label { color: var(--blue); }
+
+        .comp-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .comp-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .comp-item.old-item { color: var(--gray-500); }
+        .comp-item.new-item { color: rgba(255,255,255,0.75); }
+        .comp-icon { font-size: 14px; flex-shrink: 0; margin-top: 1px; }
+
+        /* ---- TESTIMONIALS ---- */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .testimonial {
+            background: var(--white);
+            border: 1.5px solid var(--gray-200);
+            border-radius: 14px;
+            padding: 22px;
+            transition: all 0.2s;
+        }
+
+        .testimonial:hover {
+            border-color: var(--blue);
+            box-shadow: 0 4px 20px var(--blue-dim);
+        }
+
+        .testimonial-stars {
+            color: var(--blue);
+            font-size: 12px;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+        }
+
+        .testimonial-text {
+            font-size: 14px;
+            color: var(--gray-700);
+            line-height: 1.7;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+
+        .testimonial-author { display: flex; align-items: center; gap: 10px; }
+
+        .author-avatar {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .av-a { background: #dbeafe; color: #1d4ed8; }
+        .av-b { background: #d1fae5; color: #065f46; }
+        .av-c { background: #fce7f3; color: #9d174d; }
+
+        .author-name { font-size: 13px; font-weight: 600; color: var(--gray-900); }
+        .author-role { font-size: 12px; color: var(--gray-400); }
+
+        /* ---- BOTTOM CTA ---- */
+        .bottom-cta {
+            background: linear-gradient(135deg, #171717 0%, #1292eb 100%);
+            padding: 80px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bottom-cta::before {
+            content: '';
+            position: absolute; inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 44px 44px;
+        }
+
+        .bottom-inner {
+            max-width: 520px;
+            margin: 0 auto;
+            position: relative; z-index: 1;
+        }
+
+        .big-line {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: clamp(36px, 6vw, 68px);
+            font-weight: 800;
+            line-height: 0.97;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .big-line em { font-style: italic; color: rgba(255,255,255,0.45); }
+
+        .bottom-cta p {
+            font-size: 15px;
+            color: rgba(255,255,255,0.5);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+
+        .bottom-form {
+            display: flex;
+            gap: 10px;
+            max-width: 420px;
+            margin: 0 auto 12px;
+        }
+
+        .bottom-input {
+            flex: 1;
+            padding: 13px 16px;
+            border: 1.5px solid rgba(255,255,255,0.15);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .bottom-input::placeholder { color: rgba(255,255,255,0.3); }
+        .bottom-input:focus { border-color: rgba(255,255,255,0.35); }
+
+        .bottom-btn {
+            padding: 13px 22px;
+            background: white;
+            color: var(--gray-900);
+            border: none;
+            border-radius: 10px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .bottom-btn:hover { background: var(--gray-100); transform: translateY(-1px); }
+
+        .bottom-trust { font-size: 12px; color: rgba(255,255,255,0.25); }
+
+        /* ---- ANIMATIONS ---- */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+        /* ---- RESPONSIVE ---- */
+        @media (max-width: 900px) {
+            .hero-inner { grid-template-columns: 1fr; gap: 40px; }
+            .form-card { max-width: 480px; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+            .comparison { grid-template-columns: 1fr; }
+            .timeline::before { left: 24px; }
+            .timeline-dot { width: 50px; height: 50px; font-size: 18px; }
+        }
+
+        @media (max-width: 560px) {
+            .hero { padding: 56px 24px 64px; }
+            .section { padding: 56px 24px; }
+            .bottom-form { flex-direction: column; }
+            .bottom-btn { width: 100%; }
+            .bottom-cta { padding: 64px 24px; }
+            .output-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div>
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    Free prompt toolkit — instant access
+                </div>
+
+                <h1 class="hero-headline">
+                    <span class="line-white">Turn one idea into</span>
+                    <span class="line-dim">a real business.</span>
+                    <span class="line-white">With AI.</span>
+                </h1>
+
+                <p class="hero-desc">A collection of structured prompts that take you from vague idea to validated business — with a plan, brand, visuals, and launch assets. Work through them in order or jump to what you need most.</p>
+
+                <div class="checklist">
+                    <div class="checklist-item"><span class="ci-icon">✓</span>Business Idea Generator — validated niches based on real demand</div>
+                    <div class="checklist-item"><span class="ci-icon">✓</span>Business Plan Builder — problem, solution, revenue model, risks</div>
+                    <div class="checklist-item"><span class="ci-icon">✓</span>Market Research Deep Dive — demand signals, competitors, gaps</div>
+                    <div class="checklist-item"><span class="ci-icon">✓</span>Positioning and Messaging — one-sentence statement, objection handling</div>
+                    <div class="checklist-item"><span class="ci-icon">✓</span>Branding Foundation — story, tone, colours, fonts, taglines</div>
+                    <div class="checklist-item"><span class="ci-icon">✓</span>Logo and Visual Concepts — image generator-ready prompts</div>
+                    <div class="checklist-item"><span class="ci-icon">✓</span>Pitch Deck Outline — investor-ready 12-slide structure</div>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <div class="form-eyebrow">✓ Free instant access</div>
+                <h3>Get the Business Builder Toolkit</h3>
+                <p class="form-card-sub">In your inbox in under 2 minutes. Plus weekly AI workflows free every Monday.</p>
+
+                <div class="kit-stats">
+                    <div class="stat-item">
+                        <div class="stat-num">8</div>
+                        <div class="stat-label">Prompts</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num">1</div>
+                        <div class="stat-label">Full kit</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-num">0</div>
+                        <div class="stat-label">Coding</div>
+                    </div>
+                </div>
+
+                <div id="formWrap">
+                    <input type="email" class="form-input" id="heroEmail" placeholder="your@email.com">
+                    <button class="form-btn" id="heroBtn" onclick="subscribe('hero')">Send Me the Toolkit →</button>
+                    <p class="form-trust">✓ Free forever · No spam · Unsubscribe anytime</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TIMELINE — WHAT'S INSIDE -->
+    <div class="section">
+        <div class="section-eyebrow">📁 What's inside</div>
+        <h2 class="section-title">Eight prompts.<br>One complete business kit.</h2>
+        <p class="section-sub">Each prompt builds on the last. Run them in order and you'll end up with everything you need to launch — or jump to the section you're missing.</p>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-dot">💡</div>
+                <div class="timeline-content">
+                    <span class="timeline-tag">Start here</span>
+                    <h3 class="timeline-title">Business Idea Generator</h3>
+                    <p class="timeline-desc">Not just any idea — validated ones. This prompt researches real pain points from Reddit, Quora, and ProductHunt, scores up to three niches on market opportunity, ease of entry, and profit potential, and gives you three strategy paths starting under $100.</p>
+                    <span class="timeline-save">📄 Save as: Niche Options</span>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">🧭</div>
+                <div class="timeline-content">
+                    <span class="timeline-tag">Step 2</span>
+                    <h3 class="timeline-title">Business Plan Builder</h3>
+                    <p class="timeline-desc">Takes your chosen idea and builds a clean, skimmable plan — problem statement, target customer, solution, USP, revenue model, marketing strategy, key risks, and competitive landscape. One prompt, full plan.</p>
+                    <span class="timeline-save">📄 Save as: Business Plan</span>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">🔍</div>
+                <div class="timeline-content">
+                    <span class="timeline-tag">Step 3</span>
+                    <h3 class="timeline-title">Market Research Deep Dive</h3>
+                    <p class="timeline-desc">Validates demand before you commit. Covers problem and demand signals, existing solutions and their weaknesses, gaps in the market, and clear differentiators you can own. Structured as a research summary you can reference later.</p>
+                    <span class="timeline-save">📄 Save as: Market Insights</span>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">🧠</div>
+                <div class="timeline-content">
+                    <span class="timeline-tag">Step 4</span>
+                    <h3 class="timeline-title">Ask-First Brainstorm Partner</h3>
+                    <p class="timeline-desc">When ideas feel fuzzy, this prompt asks sharp questions to pull your thinking out rather than overriding it. One question at a time, it mirrors your language and helps you map and draft without losing your own perspective.</p>
+                    <span class="timeline-save">📄 Save as: Idea Notes</span>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">🎯</div>
+                <div class="timeline-content">
+                    <span class="timeline-tag">Step 5</span>
+                    <h3 class="timeline-title">Positioning and Messaging</h3>
+                    <p class="timeline-desc">Defines how the business is explained in one clean angle. Returns a one-sentence positioning statement, a plain-English "what this is" explanation, benefit-led value points, and common objections with responses.</p>
+                    <span class="timeline-save">📄 Save as: Positioning</span>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">🎨</div>
+                <div class="timeline-content">
+                    <span class="timeline-tag">Step 6</span>
+                    <h3 class="timeline-title">Branding Foundation</h3>
+                    <p class="timeline-desc">Builds the look, feel, and voice of your brand in one go. Brand story, tone and voice, colour palette with hex codes, font pairing, logo direction, tagline options, and a moodboard description — everything a designer or AI tool needs to execute.</p>
+                    <span class="timeline-save">📄 Save as: Brand Kit</span>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">🧩</div>
+                <div class="timeline-content">
+                    <span class="timeline-tag">Step 7</span>
+                    <h3 class="timeline-title">Logo Creation Prompt</h3>
+                    <p class="timeline-desc">A ready-to-use prompt formatted for any AI image generator. Includes brand name, identity keywords, audience, preferred style, emotional tone, and colour direction — everything you need to generate a real logo concept in minutes.</p>
+                    <span class="timeline-save">📄 Save as: Logo Concepts</span>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-dot">📊</div>
+                <div class="timeline-content">
+                    <span class="timeline-tag">Step 8</span>
+                    <h3 class="timeline-title">Pitch Deck Outline</h3>
+                    <p class="timeline-desc">Turns your business into a clean 12-slide investor-style deck. Slide titles, what each slide should contain, what's missing, and visual suggestions. Covers cover through to the ask — everything you need to pitch, present, or just clarify the big picture.</p>
+                    <span class="timeline-save">📄 Save as: Pitch Outline</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- WHAT YOU'LL HAVE -->
+    <div class="section" style="background: var(--gray-50);">
+        <div class="section-eyebrow">✅ The output</div>
+        <h2 class="section-title">By the end you'll have a complete Business Kit.</h2>
+        <p class="section-sub">Eight prompts. Eight saved documents. Everything you need to launch — built by AI, shaped by your thinking.</p>
+
+        <div class="output-grid">
+            <div class="output-item">
+                <div class="output-icon">💡</div>
+                <div class="output-label">Validated niche options</div>
+            </div>
+            <div class="output-item">
+                <div class="output-icon">🧭</div>
+                <div class="output-label">Clear business plan</div>
+            </div>
+            <div class="output-item">
+                <div class="output-icon">🔍</div>
+                <div class="output-label">Market research summary</div>
+            </div>
+            <div class="output-item">
+                <div class="output-icon">🎯</div>
+                <div class="output-label">Positioning statement</div>
+            </div>
+            <div class="output-item">
+                <div class="output-icon">🎨</div>
+                <div class="output-label">Brand kit with hex codes</div>
+            </div>
+            <div class="output-item">
+                <div class="output-icon">🧩</div>
+                <div class="output-label">Logo concept prompts</div>
+            </div>
+            <div class="output-item">
+                <div class="output-icon">🖼️</div>
+                <div class="output-label">Visual asset concepts</div>
+            </div>
+            <div class="output-item">
+                <div class="output-icon">📊</div>
+                <div class="output-label">12-slide pitch deck outline</div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- COMPARISON -->
+    <div class="section">
+        <div class="section-eyebrow">⚡ The difference</div>
+        <h2 class="section-title">Most people spend months on this.<br>This does it in a weekend.</h2>
+        <p class="section-sub">Starting a business used to mean months of research, expensive consultants, and still ending up with a vague plan. Here's what changes.</p>
+
+        <div class="comparison">
+            <div class="comp-col old">
+                <div class="comp-label old-label">✗ The old way</div>
+                <div class="comp-items">
+                    <div class="comp-item old-item"><span class="comp-icon">😩</span>Months validating an idea that might not have demand</div>
+                    <div class="comp-item old-item"><span class="comp-icon">💸</span>Paying consultants thousands for a business plan</div>
+                    <div class="comp-item old-item"><span class="comp-icon">🔄</span>Weeks going back and forth on branding and positioning</div>
+                    <div class="comp-item old-item"><span class="comp-icon">📊</span>Still no clear pitch deck when you need one</div>
+                    <div class="comp-item old-item"><span class="comp-icon">😤</span>Paralysed by too many decisions, not enough clarity</div>
+                </div>
+            </div>
+            <div class="comp-col new">
+                <div class="comp-label new-label">✓ With this toolkit</div>
+                <div class="comp-items">
+                    <div class="comp-item new-item"><span class="comp-icon">⚡</span>Validated niche with demand signals in one session</div>
+                    <div class="comp-item new-item"><span class="comp-icon">📋</span>Complete business plan in under 30 minutes</div>
+                    <div class="comp-item new-item"><span class="comp-icon">🎨</span>Brand foundation with colours, fonts, and taglines done</div>
+                    <div class="comp-item new-item"><span class="comp-icon">📊</span>Pitch deck outline ready whenever you need it</div>
+                    <div class="comp-item new-item"><span class="comp-icon">🚀</span>Full business kit built in a weekend, not months</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- TESTIMONIALS -->
+    <div class="section">
+        <div class="section-eyebrow">💬 From subscribers</div>
+        <h2 class="section-title">What happens when you stop overthinking and start building.</h2>
+        <p class="section-sub">Real feedback from people who used the toolkit to go from idea to business kit.</p>
+
+        <div class="testimonials-grid">
+            <div class="testimonial">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"I'd been sitting on a business idea for 6 months. Used the Idea Generator and Business Plan prompts back to back and had more clarity in two hours than I'd had in six months of overthinking. The niche scoring alone was worth it."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar av-a">S</div>
+                    <div><div class="author-name">Sarah P.</div><div class="author-role">Aspiring founder</div></div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"The Branding Foundation prompt saved me a week of back-and-forth with a designer. I ran it, got hex codes, font pairings, and three tagline options, then handed it to my designer as a brief. She said it was the clearest brief she'd ever received."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar av-b">J</div>
+                    <div><div class="author-name">James R.</div><div class="author-role">Freelance consultant</div></div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"I used the Pitch Deck outline prompt before a meeting with an investor. Went in with a clear 12-slide structure instead of a jumbled presentation. Got a second meeting. These prompts are genuinely useful — not just another AI gimmick."</p>
+                <div class="testimonial-author">
+                    <div class="author-avatar av-c">E</div>
+                    <div><div class="author-name">Elena M.</div><div class="author-role">Early-stage founder</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTTOM CTA -->
+    <section class="bottom-cta">
+        <div class="bottom-inner">
+            <h2 class="big-line">Stop planning.<br><em>Start building.</em></h2>
+            <p>Eight prompts. One complete business kit. Free instant access.</p>
+            <div class="bottom-form">
+                <input type="email" class="bottom-input" id="bottomEmail" placeholder="your@email.com">
+                <button class="bottom-btn" id="bottomBtn" onclick="subscribe('bottom')">Get the Toolkit →</button>
+            </div>
+            <p class="bottom-trust">Free instant access. Unsubscribe anytime from your account settings.</p>
+        </div>
+    </section>
+
+<script>
+const API_URL = '/api/subscribe';
+const AUTOMATION_ID = 'aut_bf2940a7-4876-4cea-b889-e24a5e313ce0';
+
+async function subscribe(source) {
+    const emailId = source === 'hero' ? 'heroEmail' : 'bottomEmail';
+    const btnId = source === 'hero' ? 'heroBtn' : 'bottomBtn';
+    const email = document.getElementById(emailId).value.trim();
+    const input = document.getElementById(emailId);
+    const btn = document.getElementById(btnId);
+
+    if (!email || !email.includes('@')) {
+        input.classList.add('error');
+        setTimeout(() => input.classList.remove('error'), 1500);
+        return;
+    }
+
+    btn.textContent = 'Sending...';
+    btn.style.opacity = '0.7';
+    btn.disabled = true;
+
+    try {
+        await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, automation_id: AUTOMATION_ID })
+        });
+    } catch(e) { console.error(e); }
+
+    window.top.location.href = 'https://www.promptwireai.com/recommendations';
+}
+
+document.getElementById('heroEmail').addEventListener('keypress', e => { if (e.key === 'Enter') subscribe('hero'); });
+document.getElementById('bottomEmail').addEventListener('keypress', e => { if (e.key === 'Enter') subscribe('bottom'); });
+</script>
+
+</body>
+</html>
